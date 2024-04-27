@@ -1,0 +1,236 @@
+\chapter{Relevant Examples of ODEs}
+
+\section{Changing the notation}
+In the ODEs that follows we will omit any explicit reference to the time variable t:
+
+\begin{itemize}
+    \item $X(t)$ will be just called $X$
+    \item $\dot{X(t)}$ will be just called $X$
+    \item $X_0$ will be just called $X(0)$
+\end{itemize}
+
+\section{The Lotka-Volterra model of prey-predator interaction}
+These are two independent model that resulted to be equivalent:
+\begin{itemize}
+    \item \textit{Lotka} designed in 1925 as a description of an hypothetical biochemical oscillator.
+    \item \textit{Volterra} designed in 1926 as a description of two interacting populations.
+\end{itemize}
+
+\subsection{Introduction}
+Volterra's model was made to explain a strange phenomenon observed in the Adriatic sea after World War 1. During the war there was a increasing demand of fish, so ecologist and fisherman predicted that the overall population of fish would decrease. To everyone surprise after the Wold War ended, they observed an increase in population for some species.\par
+Volterra's idea was that prey and predator have different \textbf{(but related)} dynamics. \textbf{The main intuition was that preys proliferate in the absence of predators}.\par
+
+\subsection{Making the model}
+First we abstract the prey population and predator population in the following variables that uses absolute numbers:
+
+\begin{itemize}
+    \item \textbf{V:} describes the size (also called density) of the population of preys.
+    \item \textbf{B:} describes the size (also called density) of the population of predators.
+\end{itemize}
+
+We the make some basic observation regarding the inner dynamics of preys and predators \textbf{when they are isolated from each other}:
+
+\begin{itemize}
+    \item When there are no predators, preys can grow without any limitation.
+    \item When there are no preys, predators die of starvation.
+\end{itemize}
+
+We design a preliminary system of ODEs for describing these observations:
+
+\begin{itemize}
+    \item $\dot{V} = rV$ where $r$ is the \textbf{growth rate of preys}.
+    \item $\dot{P} = - sP$ where $s$ is the \textbf{death rate of predators}.
+\end{itemize}
+
+\subsubsection{Digression}
+When you construct a model you can follow two approaches:
+\begin{itemize}
+    \item Try to model all the possible details in the most accurate way you can. This will lead you to a very complicated model, but if you are able to take all the aspect of the system into account by measuring correctly the parameters introduced, then you should be able to replicate the reality. \textbf{So you can make quantitively prediction about that model.} However this can make the analysis difficult because if you want to explain a certain dynamics, it may be hidden behind all the parameters you have.
+
+    \item Try having a minimal model when you put only the details you think are necessary to understand the trend you want to predict. Then although quantitive prediction are wrong, you will have a more clear observation of the trend.
+\end{itemize}
+
+\textbf{Volterra's model follow the second approach.}
+
+\subsection{Interaction between the two species}
+We have developed a system of ODEs in the case when the two species are separated from each other, but what about when both species are present in the environment? \textbf{We observe that the predators hunts the preys}. How can I model hunting in a minimal way? \par
+Assuming that a prey and a predator meet, then the predator eats the pray and increases the change of growth of is population. Assuming that the meeting between individuals of both species is random, then to model it we add one term in each of the ODEs in our system:
+
+\begin{itemize}
+    \item In the predator ODE it has a positive sign because by eating the pray it increases the chance of survival of its population
+    \item in the predator ODE it has a negative sign because by being eaten it decreases the chance of survival of its population
+\end{itemize}
+
+
+The first intuition was that predation is proportional to the quantity of pray and predators. The rate of predations should be proportional to the quantity of meetings between individuals of the two species \textbf{(namely it is proportional to the product $V * P$)}. Note that the \textbf{meeting between individuals is random}.\par
+When a prey and a predator meet, it could happen that the predator eats the prey, \textbf{but not always}. 
+\begin{itemize}
+    \item So we declare $a$ as the portion of meetings resulting in huntings (the predator eats the prey).
+\end{itemize}
+
+As the predators eat, their chance of survival increases and they start to reproduce. 
+\begin{itemize}
+    \item So we declare $b$ as the number of offsprings produced for each huntings.
+\end{itemize}
+
+\subsection{Putting all together}
+By inserting in our system of ODEs the considerations we have made we obtain:
+
+\[
+\begin{cases}
+        \dot{V} = rV - aVP \\
+        \dot{P} = - sP + abVP\\
+\end{cases}
+\]
+
+\begin{itemize}
+    \item \textbf{First ODE:} it tells us that prey decrease by the \textbf{hunting rate} $aVP$.
+    \item \textbf{Second ODE:} it tells us that predators increase by a \textbf{hunting and reproduction rate} $abVP$.
+\end{itemize}
+
+We have modelled predation as a direct form of interaction, \textbf{it is not mediated by the environment}
+
+\section{Steady State}
+A steady state is a combination of values for the variables that remains unchanged over time. \textbf{In a steady state, all differential equations are equal to zero}.
+
+\section{Example - The SIR epidemic models}
+Epidemic phenomena deals with the spread of infectuous diseases. To study them there are used SIR models. 
+
+\subsection{Introduction}
+SIR stands for the three types of individuals in our population:
+
+\begin{itemize}
+    \item \textbf{Susceptible:} individuals that can be infected.
+    \item \textbf{Infected:} infected individuals that can spread the disease to susceptible individuals.
+    \item \textbf{Recovered:} infected individuals who passed the infection phase and cannot spread the disease anymore.
+\end{itemize}
+
+There are several variants of the SIR model, some being developed during the COVID pandemic.
+
+\subsection{Making the model}
+We design a Ordinary Differential Equation for each type of individual in our population, each ODE describes the ratios of each class of individual:
+
+\begin{itemize}
+    \item \textbf{S:} ODE for the Susceptible type.
+    \item \textbf{I:} ODE for the Infected type.
+    \item \textbf{R:} ODE for the Recovered type.
+\end{itemize}
+
+We make the following assumption:
+
+\begin{itemize}
+    \item The size of the population is constant in time and normalized to 1: $S + I + R = 1$.
+    \item Infected people can only transmit the infection, meaning they \textbf{cannot} reproduce, die, migrate and so on.
+    \item A infected person can transmit the disease only to susceptible people through personal contact between the two (horizontal transmission).
+    \item The contact between individuals is random, meaning the number of infections is proportional to both I and S.
+    \item After being Infected a person will recover become resistant to that disease.
+\end{itemize}
+
+Following these assumption we can represent the model as the following system of equations:
+
+\[
+\begin{cases}
+        \dot{S} = - \beta S I \\
+        \dot{I} = \beta S I - \gamma I\\
+        \dot{R} = \gamma I \\
+\end{cases}
+\]
+
+where:
+
+\begin{itemize}
+    \item $\beta$: is the \textbf{infection coefficient} describing probability of infection after the contact between a susceptible individual and an infected one.
+    \item $\gamma$: is the \textbf{recovery coefficient} describing the rate of recovery of each infected individual.
+\end{itemize}
+
+\subsubsection{Dynamic between S and R}
+S and are have a very intuitive dynamic: S having only a negative sign will inevitably decrease, while R having only a positive sign will increase. \par
+
+In the case of I, its behaviour strictly depends on the value of $\beta$ and $\gamma$, more precisely:
+
+\begin{itemize}
+    \item if $\beta < \gamma$: then I will decrease (since S $\leq$ 1)
+    \item if $\beta > \gamma$: then the behaviour of I depends on S. If $S > \frac{\gamma}{\beta}$ then I will increase its value.
+\end{itemize}
+
+\subsection{Extending the model - Vaccination}
+The SIR model can be used to study the effects of vaccinations: considering if its convenient or not to introduce mandatory vaccination for some diseases. \par
+To better study vaccinations you need to consider the model for several years. For instance if you vaccinates newborns, you will see the result of your choice only after they will become the main part of your population. By considering a long time span \textbf{births and deaths cannot be ignored}, so we need to extend our SIR model.
+
+\par idea: we add a positive terms to represents births and add a negative terms to represent death. To make this work we will use the following assumptions:
+
+\begin{itemize}
+    \item \textbf{the population size is still constant over time} (not too wrong: the size of the population of a country does not change significantly over 10-20 years).
+    \item No vertical transmission of the disease (meaning from parent to children.
+    \item Newborns are considered Susceptible from the get go.
+\end{itemize}
+
+To make the population constant we introduce the coefficient $\mu$ for both birth and death. Consider that the population size is normalized to 1. We declare with $N$ the population size s.t. $N = S + I + R$ and $\dot{N} = \mu - \mu N$.
+
+Made these assumption we can extend the model obtaining the following system of ODEs:
+
+\[
+\begin{cases}
+        \dot{S} = \mu - \beta S I \\
+        \dot{I} = \beta S I - \gamma I\\
+        \dot{R} = \gamma I\\
+\end{cases}
+\]
+
+\textbf{Remember:} we are assuming that all type of people could reproduce, but the newborns are always Susceptible, since we are not considering vertical transmission. Thus in the ODE of S we put $]\mu$ alone to represent the number of people born during the current time unit.
+
+\subsection{Introducing death}
+As we have stated multiple times, the population size is assumed to be constant and normalized to 1. So having newborns in our model could lead us to an increase of the population, which is wrong. The solution is to introduce death in order to maintain the size. \par
+The death is introduced by using the same parameter as the birth $\mu$, only with a negative sign. The obtained model will be:
+
+\[
+\begin{cases}
+        \dot{S} = \mu - \beta S I - \mu S \\
+        \dot{I} = \beta S I - \gamma I - \mu I\\
+        \dot{R} = \gamma I - \mu R\\
+\end{cases}
+\]
+
+The dynamics of the model is governed by the ration between the positive and negative coefficients in the equation of I:
+
+\begin{itemize}
+    \item $\beta < (\mu + \gamma)$: I can only decrease (since $S \leq 1$.
+    \item $\beta > (\mu + \gamma)$: the behaviour of I depends on S. It increases if $S > \frac{(\mu + \gamma)}{\beta}$.
+\end{itemize}
+
+Note how compared to the previous case where S could only decrease, \textbf{now this is no longer true because the births could maintain S above} $\frac{\mu + \gamma}{\beta}$.
+
+\subsection{Introducing vaccination}
+Now let's consider the case where we can fight the disease by using vaccination.\par
+We consider to vaccinates the newborns, the model can tell us if this will helps us and the fraction of newborns $p$ are needed to be vaccinated to do so. \par
+We consider that if a newborn is vaccinated, then it has type Recovered.\par
+The model we get is the following:
+
+\[
+\begin{cases}
+        \dot{S} = (1-p)\mu - \beta S I - \mu S \\
+        \dot{I} = \beta S I - \gamma I - \mu I\\
+        \dot{R} = p \gamma I - \mu R\\
+\end{cases}
+\]
+
+\subsection{Determining the vaccination threshold}
+We declare with $p_c$ the thresgold value of vaccinations needed, that it the ratio of newborns that should be vaccinated in order to eradicate the disease.\par
+There are two ways to compute $p_c$:
+
+\begin{itemize}
+    \item The value can be determined by simply performing numerical simulation varying the value of $p$
+
+    \item The value of $p_c$ can be computed analytically.
+\end{itemize}
+
+By considering the second opition we obtain the following formula to compute the ratio:
+ \begin{center}
+     $p_c = 1 - \frac{\mu + \gamma}{\beta}$ 
+ \end{center}
+
+\section{Limitation of continuous dynamical models}
+The main limitation of this approach is that they are deterministic: once you define the ODE and you fix an initial value for the variables you obtain \textbf{THE} only possible dynamics of the system. \par
+In many cases there are aspects you did not model and there are events that can happen with some probabilistic distribution that you have not modelled here. To overcome this limitation we need to use a different modelling technique that introduce probability distribution in our model.
+
+ 
