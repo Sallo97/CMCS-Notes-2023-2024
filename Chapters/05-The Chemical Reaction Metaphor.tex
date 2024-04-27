@@ -1,0 +1,287 @@
+\chapter{The Chemical Reaction Metaphor}
+
+Chemical reactions are illustrative examples of complex systems, they exhibit complex dynamics out of very simple interactions. 
+Also chemical reaction are much easier to write than ODEs, so we will use them as a modelling language. \textbf{Chemical Reaction are used as a metaphor to describing interactions.}
+
+\section{What is a chemical reaction?}
+A chemical reaction is an interaction between molecules in a chemical solution that cause a transformation of these molecules. We categorize as:
+
+\begin{itemize}
+    \item \textbf{reactants:} the group of molecules that participate in the reaction.
+    \item \textbf{products:} the group of molecules (it could be a different quantities that the reactants) that are obtained after the transformation.
+\end{itemize}
+
+We abstract molecules as symbols, \textbf{it does not matter what they are in the reality}. Molecules are assumed to be in a \textbf{chemical solution}, that is a fluid medium where they float. While in these solution they can meet and start a chemical reaction.\par
+In order to represent the quantity of molecules is usually expressed in terms of \textbf{concentrations} (number of molecules per unit). \par
+Given the molecule A, [A] denotes the concentration of that molecule, usually expressed in $\frac{mol}{L}$. \par
+
+Usually the notation for chemical reactions is some sort of rule between the reactants and the products:
+
+\begin{center}
+    $\ell_1 S_1 + ... + \ell_p S_p \xrightarrow{k} \ell^{'}_1 P_1 + ... + \ell^{'}_\gamma P_\gamma$
+\end{center}
+where:
+\begin{itemize}
+    \item $S_i$ are \textbf{reactants}.
+    \item $P_i$ are \textbf{products}.
+    \item $\ell_{1}$, $\ell^{'}_{i} \in \mathbb{N}.$ are \textbf{stoichiometric coefficients}. They express the number of reactants/products of each type that are consumed/produced in the reaction
+    \item $k \in \mathbb{N}_{\geq 0}$ is the \textbf{kinetic constant}. It express the rate of occurrence of reaction in a chemical solution.
+\end{itemize}
+
+Note: when we omit the $l_i$, it means that is value is $1$.
+
+\subsection{Types of Chemical Reactions}
+
+There are several types of chemical reactions:
+
+\begin{itemize}
+    \item \textbf{Synthesis:} $\xrightarrow{k} P$
+    \item \textbf{Degradation:} $S \xrightarrow{k}$
+    \item \textbf{Transformation:} $S \xrightarrow{k} P$
+    \item \textbf{Binding:} $S_1 + S_2 \xrightarrow{k} P$
+    \item \textbf{Unbinding:} $S \xrightarrow{k} P$
+    \item \textbf{Catalysis:} $E + S \xrightarrow{k} E + P$
+\end{itemize}
+and many more
+
+\subsubsection{Complex types as aggregation of simpler type}
+Complex chemical reaction can be redefined as a sequence of simpler chemical reactions. Take for example the Catalysis ($E + S \xrightarrow{k} E + P$), it can be reinterpreted as a sequence of:
+
+\begin{itemize}
+    \item Binding: $E + S \xrightarrow{k} M$
+    \item Transformation: $M \xrightarrow{k} N$
+    \item Unbinding: $N \xrightarrow{k} E + P$
+\end{itemize}
+
+\subsection{Reversibility of Chemical Reactions}
+Often chemical reactions can occur in both directions. To indicate formulas that are reversible we will use the symbol $\leftrightarrows^{k}_{k-1}$:
+
+\begin{center}
+    $\ell_1 S_1 + ... + \ell_p S_p \leftrightarrows^{k}_{k-1} \ell^{'}_1 P_1 + ... + \ell^{'}_\gamma P_\gamma$
+\end{center}
+
+where $k-1 in R_{\leq 0}$ is the kinetic constant of the inverse reaction, transforming products $P_i$ into reactants $S_i$.
+\par In reality all chemical reaction are reversible, only one of the two direction is so unlikely that is not considered possible.
+
+\subsection{The mass action kinetics of chemical reactions}
+The dynamics of chemical reactions is based on the assumption that \textbf{molecules float in a well-stirred fluid medium} (e.g. water). In this scenario they are free to move and randomly meet each other. When two molecules meet, they can react.\par
+The dynamics of chemical solution is modeled by the \textbf{law of mass action}
+
+\subsubsection{Law of mass action}
+The \textbf{rate} of a chemical reaction expresses the number of occurences of such a reaction in a given chemical solution in a time unit.\par
+The law of \textbf{mass action} is an empirical law for the computation of the rate of chemical reaction:.\par
+
+\begin{center}
+    The rate of a chemical reaction is proportional to the product of the concentrations of its reactants.
+\end{center}
+
+Given the following chemical reaction:
+\begin{center}
+    $\ell_1 S_1 + ... + \ell_p S_p \xrightarrow{k} \ell^{'}_1 P_1 + ... + \ell^{'}_\gamma P_\gamma$
+\end{center}
+
+Then the rate of a reaction is defined as follows:
+\begin{center}
+    $k[S_{1}]^{\ell_{1}} ... [S_{p}]^{\ell_{p}}$
+\end{center}
+
+The rate of its inverse reaction (from right-to-left) is:
+\begin{center}
+    $k_{-1}[P_{1}]^{\ell^{'}_{1}} ... [P_{\gamma}]^{\ell^{'}_{\gamma}}$
+\end{center}
+
+\subsection{Understanding the kinetic constant}
+What is the measure unit of a kinetic constant k?
+It depends on the number of reactants:
+
+\begin{itemize}
+    \item The measure unit of \textbf{concentrations} is $\frac{mol}{L}$
+    \item The measure unit of the \textbf{reaction rate} is $\frac{mol}{(L \times sec)}$ (it is the concentration of each product produced in one unit of time.
+\end{itemize}
+Note: some kinetic constants have to be changed if you change the measure unit of concentrations (e.g. $\mu mol$) or the time unit (e.g. hours).
+
+\subsection{Dynamic equilibrium}
+Given an initial concentration we can have an idea about which is the faster reaction that will take place among the one we have. Something we can compute is an equilibrium point for our reversible reactions. \par
+Given a generic reversible reaction:
+\begin{center}
+    $\ell_1 S_1 + ... + \ell_p S_p \leftrightarrows^{k}_{k_{-1}} \ell^{'}_1 P_1 + ... + \ell^{'}_\gamma P_\gamma$
+\end{center}
+A dynamic equilibrium is \textbf{reached when the two rates are equal}:
+\begin{center}
+    $k[S_{1}]^{\ell_{1}} ... [S_{p}]^{\ell_{p}}$ $=$ $k_{-1}[P_{1}]^{\ell^{'}_{1}} ... [P_{\gamma}]^{\ell^{'}_{\gamma}}$
+\end{center}
+
+Then it is easy to compute the equilibrium using the following formula:
+\begin{center}
+    $\frac{k}{k_{-1}} = \frac{[P_{1}]^{\ell^{'}_{1}} ... [P_{\gamma}]^{\ell^{'}_{\gamma}}}{[S_{1}]^{\ell_{1}} ... [S_{p}]^{\ell_{p}}}$
+\end{center}
+
+\section{From chemical reactions to Ordinary Differential Equations}
+We can use reaction rates to be able not only to compute point-wise rates and equilibrium point, but \textbf{to be able to analyse the dynamics of a system any time}.\par
+Since rates are frequencies, \textbf{so some sort of derivative}, we can use them to define ODEs.\par
+We will consider every molecule of the reaction as a variable of o our system of differential equation. Each molecule will have its own differential equation and then in each of these equations we will add positive and negative terms according to the reaction in which these molecules participates:
+
+\begin{itemize}
+    \item for every reaction where the molecule we are considering is a reactant, that is \textbf{it will be consumed to generate a product}, then its ODE will contain a negative term: $- \ell r$
+
+    \item for every reaction where the molecule we are considering is a product, that is \textbf{it will be produced}, then its ODE will contain a positive term: $+ \elle r$
+\end{itemize}
+
+where:
+\begin{itemize}
+    \item $\elle$: is a \textbf{stoichiometric coefficient} of a product S in R.
+    \item $r$: is the rate of R.
+\end{itemize}
+
+%mettere slide lezione 5 pag 20/44%
+
+\section{Reverse engineering ODEs}
+As we have proved, starting from a system of chemical reaction we con exploit the law of mass actions to translate it into a system of polynomial ODEs. \par
+Let us now consider the opposite: starting from a system of ODEs and finding a way to translate it into a system of chemical reactions. As we will see, \textbf{this works often, but not always}.
+
+\subsubsection{Notation}
+We begin from ODEs by omitting the $[\dot]$ brackets representing concentrations. The idea is to \textbf{start from a generic system of ODEs}, not one that refers to chemical reactions.
+
+Let us consider the following system of ODE as an example:
+
+\[
+\begin{cases}
+        \frac{dX}{dt} = 6 X - 0.2 X Y \\
+        \frac{dY}{dt} = 0.4 X Y - 2 Y\\
+\end{cases}
+\]
+
+We can translate it back to a system of chemical reactions by constructing one reaction for each team of each equation by matching each term with the pattern:
+
+\begin{center}
+    $ \ell_{i} k[S_{1}]^{\ell_{1}} ... [S_{p}]^{\ell_{p}}$
+\end{center}
+
+For example 6X in the equation of X tells us:
+
+\begin{itemize}
+    \item there is a reaction producing X (since the sign of the term is positive)
+    \item the reaction has X as its only reactant
+    \item $ \ell_{i} k = 6$ where $\ell_{i}$ is the number of new X to be produced.
+\end{itemize}
+
+\begin{itemize}
+    \item There is a reaction producing Y from X (since the sign of the term is negative).
+    \item to be precise we are only sure that X will not be produced, so we select Y since its not X.
+    \item the reaction has X and Y as its reactant.
+    \item $\ell_{i} k = 0.2$ where $k = 2$ sincere there are no X to be produced.
+\end{itemize}
+
+Lets translate the whole system:
+
+\[
+\begin{cases}
+        \frac{dX}{dt} = 6 X - 0.2 X Y \\
+        \frac{dY}{dt} = 0.4 X Y - 2 Y\\
+\end{cases}
+\]
+
+Will be the following reactions:
+
+\begin{itemize}
+    \item $X \xrightarrow{6} 2 X$
+    \item $X + Y \xrightarrow{0.2} Y$
+    \item $X + Y \xrightarrow{0.4} X + 2Y$
+    \item $Y \xrightarrow{2}$
+\end{itemize}
+
+\subsection{Counterexample}
+Consider the following example:
+
+\[
+\begin{cases}
+        \frac{dX}{dt} = 6 X - 0.2 X Y - Y \\
+        \frac{dY}{dt} = 0.4 X Y - 2 Y\\
+\end{cases}
+\]
+
+\textbf{Now no reaction can reduce the concentration of X without having X among its reactants.}
+
+From this counterexample we derive the following conjecture:
+\begin{center}
+    The translation should work for all systems of polynomial ODEs in which each negative term contains all the variable of its equation
+\end{center}
+
+\section{Reverse engineering the Lotka-Volterra model}
+Let us see how to transform the Lotka-Volterra model into a system of chemical reactions.\par
+Given the system of ODEs:
+\[
+\begin{cases}
+        \dot{V} = rV - aVP \\
+        \dot{P} = - sP + abVP\\
+\end{cases}
+\]
+
+\begin{itemize}
+    \item \textbf{V:} denotes preys
+    \item \textbf{P:} denotes predators.
+    \item \textbf{a}: denotes the portion of eetings resulting in hunting.
+    \item \textbf{b:} denotes the number of offsprings produced for each hunting.
+\end{itemize}
+
+By applying the steps we have stated, we obtain:
+
+\begin{itemize}
+    \item $V \xrightarrow{r} 2V$
+    \item $P \xrightarrow{s}$
+    \item $V+P \xrightarrow{a} (1 + b)P$
+\end{itemize}
+
+\section{Reverse engineering the SIR model}
+Let us see how to transform the SIR model into a system of chemical reactions.\par
+Given the system of ODEs:
+\[
+\begin{cases}
+        \dot{S} = (1-p)\mu - \beta S I - \mu S \\
+        \dot{I} = \beta S I - \gamma I - \mu I\\
+        \dot{R} = p \gamma I - \mu R\\
+\end{cases}
+\]
+
+\begin{itemize}
+    \item \textbf{S:} denotes susceptible people
+    \item \textbf{I:} denotes infected people
+    \item \textbf{R:} denotes recovered people
+    \item $\beta$: denotes the infection coefficient
+    \item $\gamma$: denotes the recovery coefficient
+    \item $\mu$: denotes the birth and death coefficient
+\end{itemize}
+
+By applying the steps we have stated, we obtain:
+
+\begin{itemize}
+    \item $\xrightarrow{\mu} S$
+    \item $S \xrightarrow{\mu}$
+    \item $I \xrightarrow{\mu}$
+    \item $R \xrightarrow{\mu}$
+    \item $S + I \xrightarrow{\beta} 2 I$
+    \item $I \xrightarrow{\gamma} R$
+\end{itemize}
+
+\section{Reverse engineering the logistic equation}
+Recall the form of the logistic equation:
+\begin{center}
+    $\dot{N} = r_{c} N (1 - \frac{N}{K}$
+\end{center}
+
+where:
+\begin{itemize}
+    \item $r_c$: is the \textbf{birth rate}
+    \item \textbf{K:} is the \textbf{carrying capacity} of the environment
+\end{itemize}
+
+First we rewrite the equation as:
+\begin{center}
+    $\dot{N} = r_{c} N - \frac{r_c}{K} N^{2}$
+\end{center}
+
+By applying the steps we have stated, we obtain:
+\begin{itemize}
+    \item $N \xrightarrow{rc} 2N$
+    \item $2N \xrightarrow{\frac{r_{c}}{K}}N$
+\end{itemize}
