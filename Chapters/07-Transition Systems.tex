@@ -1,0 +1,66 @@
+\chapter{Transition Systems}
+We want to start considering models that permit us to \textbf{study the global behaviour of a system}. Assume we are interested in studying whether a system can reach a bad state:
+\begin{itemize}
+    \item If we use ODEs we can state only the "average" behaviour of a system.
+    \item if we us a Stochastic simulator we can only study a number of different possible behaviours.
+\end{itemize}
+Both approaches does not guarantee that the system will never reach a bad state. To solve this problem we need to introduce a new way of modeling the system behaviour by using Transition Systems.\par
+Transition Systems are \textbf{another model of behavior}, so another way to specify how a value changes over time.
+
+\section{What is a Transition System}
+A Transition System is a pair $(S, \rightarrow)$ where:
+\begin{itemize}
+    \item S is a \textbf{set of states}.
+    \item $\rightarrow \subseteq S \times S$ is the \textbf{transition relation}.
+\end{itemize}
+Given two states $s, s^{'} \in S, (s, s^') \in \rightarrow$, then we can write $s \rightarrow s^'$.\par 
+If instead we have $s \nrightarrow$ it denotes that there exists no $s^' \in S$ s.t. $s \rightarrow s^'$.\par
+Note that:
+
+\begin{itemize}
+    \item The set of states can be infinity (typically is assumed to be recursively enumerable).
+    \item Transitions describe system state changes.
+    \item A state may have more than one outgoing transitions ( $s \rightarrow s^'$ and $s \rightarrow s^{''}$ capturing \textbf{non-deterministic behaviors}. The fact that $s_1$ may evolve in either $s_2$ or $s_3$ does not necessary mean that there is a random choice between the two possibilities. The state choosen could depend froma timer, a scheduler, a probabilistic choice and so on. In general, non-determinis is an \textbf{abstraction} of choice criterion that we simply do not want to model.
+\end{itemize}
+
+\section{Trace}
+A trace $t$ in a Transition System is a path, meaning a sequence of states t = $s_0, s_1, ..., s_i, s_{i+1}, ...$ such that for each $s_i$ and $s_{i+1}$ ($i \in from the initial state \mathbb{N}$ it holds $s_i \rightarrow s_{i+1}$. $s_0$ is always chose as the \textbf{initial state}.
+Note:
+\begin{itemize}
+    \item t = $s_0$ is the \textbf{minimal trace}.
+    \item a trace t is maximal if either t is infinite or $t = s_0, s_1, ..., s_n$ and $s_n \nrightarrow$.
+\end{itemize}
+
+\section{Reachability}
+Given a state s in a Transition System $(S, \rightarrow)$ we can say that s is reachable if starting from the initial state $s_0$ there exists a trace that starts from $s_0$ and ends at $s$: $t = s_0, s_1, ..., s_n, s$.\par
+Very often a Transition System is used to verify that in the model we can reach a particular (good or bad) state.
+
+\par{Class of Transition Systems - Kripke Structures}
+A Kirpke Structure is a class of Transion Systems where states are characterized by a set of \textbf{atomic propositions} that can either be true or false. \par
+Given a (finite) state of atomic propositions $AP$, a Kripke Structure $K$ is a Transition System $(S, \rightarrow)$ where $S = \mathcal{P}(AP)$.
+\begin{itemize}
+    \item $\mathcal{P}(AP)$ denotes the powerset of AP.
+    \item The interpretation is that an atomic proposition $a$ is contained in a state if and only if it is true in that state
+\end{itemize}
+
+\textbf{Note: a state $s$ contains the proposition that are true when inside it.}
+
+\section{Transition Systems over a set of variables}
+Given a set of variables $X = \{ X_1, X_2, ..., X_n\}$ and a set of domains $\{D_1, D_2, ..., D_n\}$ s.t. $D_i$ is the domain of $X_i$, a Transition System over X is a Transition System $(S, \rightarrow)$ where $S = D_1 \times D_2 \times ... \times D_n$.
+
+\subsection{Transition Rules}
+Given a Transition System over a set of variables, it can be specified b y giving a set of \textbf{transition rules} having the following form:
+\begin{center}
+    guard $\rightarrow$ update
+\end{center}
+where:
+\begin{itemize}
+    \item \textbf{guard}: is \textbf{conjunction of conditions} on the state variables, each having the form $X_i$ op Exp (op is a comparison operator).
+    \item \textbf{update}: is a \textbf{conjunction of assignments} to state variables, each having the form $X^{'}_{i} = $ Exp, with $X^{'}_{i}$ denoting the new values of $X_i$ 
+\end{itemize}
+
+The idea is that the transition relation contain a transition between each pair of states $s_1, s_2$ s.t.:
+\begin{itemize}
+    \item $s_1$ satisfies the guard.
+    \item  $s_2$ can be obtained by applying to $s_1$ the assignments described in update.
+\end{itemize}
