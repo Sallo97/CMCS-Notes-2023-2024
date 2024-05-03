@@ -1,0 +1,125 @@
+\chapter{Markov Chains}
+Sometimes the choice criterion for the transition to pick is probabilistic or due to a stochastic race between poisson processes (race condition). To take care of these cases we need to extend the Transition Systems.
+
+\section{Discrete Time Markov Chains}
+Let us extend Transition Systems introducing probabilities.\par
+A Discrete Time Markov Chain is a pair $(S, P)$ where:
+\begin{itemize}
+    \item S is the set of \textbf{states}.
+    \item $P: S \times S \rightarrow [0, 1]$ is the \textbf{probability transition matrix} such that for all $s \in S$ in holds:
+    \begin{equation*}
+        \sum_{s^{'} \in S} P(s, s^{'}) = 1        
+    \end{equation*}
+\end{itemize}
+
+The probability transition matrix can also be expressed as a \textbf{probabilistic transition relation} $\rightarrow \subseteq S \times [0,1] \times S$ such that $(s, p, s^{'}) \in \rightarrow$ if and only if $P(s, s^{'}) = p > 0$. \par
+\textbf{Note:} if $p = 0$ then the transition is usually omitted. \par
+
+When the set of states is finite ( $S = \{s_{0}, s_{1}, ..., s_{n} \} )$ the probability transition matrix can be represented as a square matrix:
+
+\[
+P = \begin{bmatrix}
+p_{00} & p_{01} & ... & p_{0n} \\
+p_{10} & p_{11} & ... & p_{1n} \\
+... & ... & ... & ... \\
+\vdots & \vdots & ... & \vdots \\
+p_{n0} & p_{n1} & ... & p_{nn}
+\end{bmatrix}
+\]
+
+where $p_{ij} = P(s_{i}, s_{j})$ and the sum of each row is equal to 1. \par
+
+In Discrete Time Markov Chains we usually have a probability distribution of initial states, represent as a vector:
+\begin{itemize}
+    \item $[1, 0, 0]$ means that state $s_0$ is the only initial state
+    \item $[0.5, 0.5, 0]$ means that $s_{0}$ and $s_{1}$ are equally likely to be initial states
+\end{itemize}
+
+The constraint $\sum_{s^{'} \in S} P(s, s^{'}) = 1$ implies that every state has at least one outgoing transition (otherwise the sum would be 0), hence deadlocks correspond to states with a self-loop.
+
+\section{Paths}
+A path of a Discrete Time Makov Chain (DTMC) is the same concept behind the trace for a Transition System:\par
+A path $\pi$ of a DTMC described by the pair $(S, P)$ with initial state $s_{0}$ is a possibly infinite sequence of states $\pi = s_{0}, s_{1}, ...$ such that for each $s_{i+1}$ with $i \in \mathbb{N}$ in $\pi$ it holds $P(s_{i}, s_{i+1}) > 0$.\par
+
+The probability of a path is simply the product of the probabilities of its transitions:
+\begin{equation*}
+    Prob(s_{0}, s_{1}, ..., s_{n}) = \prod^{n-1}_{i=0} P(s_{i}, s_{i+1})
+\end{equation*}
+\begin{center}
+    or if we do not know where it ends:
+\end{center}
+\begin{equation*}
+    Prob(s_{0}, s_{1}, ...) = \prod_{i \in \mathbb{N}} P(s_{i}, s_{i+1})
+\end{equation*}
+
+\section{Probabilistic Reachability}
+In a Deterministic Time Markov Chain it is possible to compute the probability that the system will reach a given state:
+
+\begin{itemize}
+    \item \textbf{Reachability:} property expressing whether a given state can be reached (there exists a path leading to it).
+    \item \textbf{Probabilistic reachability:} probability of reaching a given state (probabilities of all the paths leading to it).
+\end{itemize}
+
+Since paths are independent events, their probabilities can be summed.\par
+The probability of reaching state s of a DTMC $(S, \rightarrow)$ from the initial state $s_{0}$ is the sum of the probabilities of all paths leading to it. Below the mathematical formula:
+\begin{equation*}
+    ProbReach(s_{0}, s) = \sum_{\pi \in Reach(s_{0}, s)} Prob(\pi)
+\end{equation*}
+where $Reach(s_{0}, s)$ is the set of paths reaching s (it can be infinite).
+
+\section{Compute probabilistic reachability}
+Solving probabilistic reachability $ProbReach(s, s^{'})$ amounts to solving a system of linear equations in order to obtain $x_{s}^{'}$:
+\[
+\begin{cases}
+    1 \ \ \ \ if \ s_{i} = s^{'} \\
+    \sum_{s_{j} \in S} P(s_{i}, s_{j}) X(s_{j}) \ \ \ otherwise
+\end{cases}
+\]
+where P is the probability transition matrix of the DTMC. This can be done by applying iterative computational algebra methods.
+
+\section{Continuous Time Markv Chains (CTMC)}
+Now let's extend Transition Systems with stochastic rates:\par
+A Continuous Time Markov Chain is a pair $(S, R)$ where:
+\begin{itemize}
+    \item $S$ is a set of \textbf{states}
+    \item $R ; S \times S \rightarrow \mathbb{R}_{\geq {0}}$ is a \textbf{transition rate matrix}
+\end{itemize}
+
+The transition rate matrix can be expressed also as a \textbf{stochastic transition relation} $\rightarrow \subseteq S \times \mathbb{R}_{\geq 0} \times S$ s.t. $(s, r, s^{'}) \in \rightarrow$ if and only if $R(s, s^{'} = r > 0$ (if $r = 0$ we omit it).
+
+\subsection{Race conditions}
+If we have multiple states $s{'}$ such that $R(s, s^{'}) > 0$ then we can have a \textbf{race condition}, that is the "fastest" transition determines the next state of the system. To be sure which transition we take we first have to resolve two questions,
+
+\subsubsection{How many time we spend in a state before the transition?}
+We define the \textbf{exit rate of the state s} $E(s)$ which describes the time I spend to stay in s is exponentially distributed which is the sum of the rate of the outgoing transitions:
+\begin{equation*}
+    E(s) = \sum_{s^{'} \in S} R(s, s^{'})    
+\end{equation*}
+
+\subsubsection{Which transition is eventually taken?}
+The choice of the transition to take is proportional to the rate of each transition and is independent from the time at which it occurs.
+
+\subsection{Discrete Time Markov Chain of a Continuous Time Markov Chain}
+Since we can ignore time when deciding which transition to take, we can use a Discrete Time Markov Chain to model it. We obtain our DTMC by normalizing the transition rates of the Continuous Time Markov Chain we have, in respect to the exit rate of each state.
+So given a $CTMC (S, R)$, its embedded DTMC is the $DTMC (S, P)$ where for any $s, s^{'} \in S$:
+\[
+P(s,s^{'}) =
+\begin{cases}
+    R(s, s^{'})/E(s) \ \ \ if \ \  E(s)>0\\\
+    1 \ \ \ \ \ if \ \ E(s) = 0 \And s = s^{'}\\\
+    0 \ \ \ \ \ otherwise
+\end{cases}
+\]
+
+\section{Uniformised DTMC}
+Given a CTMC, what is the probability of the system to be in a state $s$ at a given time? To solve this we introduce the uniformised DTMC.\par
+The idea is that I choose a normalization factor called the \textbf{uniformisation rate} $q$ which is not the \textbf{exit rate of each state}, but a single factor for all parameters. The uniformisation rate q is set as being greater or equal to all the exit rates of the CTMC rates. Then I construct the uniformised DTMC by recompute each rate r of the CTMC discretizing them into probability $\frac{r}{q}$. Self-loops are added where necessary.
+
+\subsection{Interpretation of the uniformised DTCM}
+
+\begin{itemize}
+    \item a transition in the uniformised DTMC describes a step with duration $\frac{1}{q}$
+    \item q should be chosed big enough to assume that at most one transition can occur during a $\frac{1}{q}$ time interval
+\end{itemize}
+
+Transient probabilistic reachability of a CTMC can now be computed as probabilistic reachability in the uniformised DTMC, bu taking the length of the paths in the DTMC into account.

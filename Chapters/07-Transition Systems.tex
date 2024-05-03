@@ -64,3 +64,33 @@ The idea is that the transition relation contain a transition between each pair 
     \item $s_1$ satisfies the guard.
     \item  $s_2$ can be obtained by applying to $s_1$ the assignments described in update.
 \end{itemize}
+
+%starts Lecture 8%
+
+\section{Labeled Transition Systems}
+Consider a Concurrent Interaction Systems where we have several components that are in some extent independent, but they can interact with each other. Representing the system as a whole would be overwhelming, requiring lots of variables and rules. Instead it would be more natural to represent it in a \textbf{Compositional Way} by separating the variables and rules depending of which component they refer to (similar approach to object oriented programming where we create programs that use several classes, but each one is defined separately).\par
+In order to define this compositionality feature, we need to find a way to define a transition system based on the individual components, \textbf{taking into account that they could interact between each other}. This means that in the case of two components that interact with each other, when merging their transition systems I should be able to unify their rule that explain the interaction between them. In order to recognize these activities we introduce a \textbf{labels} and define Labeled Transition Systems.\par
+Labeled Transition Systems (LTS) are an extended version of Transition Systems in which transitions are enriched with labels. Formally, a LTS is a triple $(S, L, \rightarrow)$ where:
+\begin{itemize}
+    \item S is a set of \textbf{states}
+    \item L is a set of \textbf{labels}
+    \item $\rightarrow \subseteq S \times L \times S$ is a \textbf{labeled transition relation}. the triple $(s, \ell, s^{'}) \in L$ is usually denoted as $s \xrightarrow{\ell} s^{'}$. 
+\end{itemize}
+
+\subsection{Transition Labels}
+Transitions labels $\ell$ describe the action performed by the system (or a single components) during a transition. We distinguish two types of labels:
+
+\begin{itemize}
+    \item Labels that use $\tau$ describe an internal action, that is one that is performed in isolation by the single component that contains it.
+    \item Other labels ($a, b, c, ...)$ describe potential actions the system (or component) could perform by interaction with some other component.
+\end{itemize}
+
+\subsection{Synchronization}
+There are two ways to model synchronization:
+\begin{itemize}
+    \item \textbf{Binary synchronization:} it specify the interaction between two components. A transition with label $a$ of one components has to be performed together with a transition with label $\overline{a}$ (same symbol, but overlined) of another component.
+
+    \item \textbf{Global synchronization:} actions that are synchronized among all system component. All components having a transition with the same label $a$ must perform such a transition together.
+\end{itemize}
+
+\textbf{Note:} the synchronization of a number of transitions result in a new $\tau$ transition.

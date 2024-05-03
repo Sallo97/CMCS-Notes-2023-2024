@@ -1,0 +1,53 @@
+\chapter{Discrete-Event Simulations (DES)}
+
+Discrete Event Simulation is a generalization of the Simulation we have seen so far. Consider the Stochastic Simulations (e.g. Gillespie's algorithm and PRISM), their limitations lies if the events of a system could be not instantaneous. Considers the case when the frequency of events follow different distributions (e.g. fixed delay, uniform distribution within an interval, ...), in that case we need to generalize the simulation to be able to allow these timing issues in our system. \par
+
+Discrete Event Simulation (DES) does not rely on the memory-less property of Stochastic Simulations, \textbf{we have to keep track of what is going on in our system}. DES implement an \textbf{event list} to be aware of the time passing. In an event list we have:
+
+\begin{itemize}
+    \item \textbf{State:} is a description of system configuration in terms of a set of variables.
+    \item \textbf{Activity:} is a process that involves a sequence of updates of the state variables (events) over time. It has a \textbf{duration}.
+    \item \textbf{Event:} is an instantaneous update of the state variables. They can correspond to the start and end of an activity.
+    \item \textbf{Event notice:} is a description of a future event with the time at which it will happen.
+    \item \textbf{Future Event List:} is a list of event notices ordered by time.
+\end{itemize}
+
+%immagine lezione #14 in pag 10/19%
+
+\section{Future Event List}
+the Future Event List (FEL) is the queue we have to schedule the future events. It contains notices of all future events that are scheduled and is ordered by increasing time of event notice.\par
+
+%immagine lezione #14 in pag 11/19%
+
+\subsubsection{Generalization of the simulation algorithm using the FEL}
+\begin{itemize}
+    \item initialize state variables, the FEL and a \textbf{global clock variable} $T = 0$
+    \item at each step:
+        \begin{itemize}
+            \item remove the first event notice $(t, Event)$.
+            \item handle Event. This could cause the update of state variables, adding one or more event notices to the FEL and removing one or more scheduled events from the FEL.
+            \item update the global cloc $T = t$
+        \end{itemize}
+
+    \item we stop when the clock reach a stop time $T_{stop}$ s.t. $T = T_{stop}$ or the FEL is empty. 
+\end{itemize}
+
+\subsection{Conditional and Primary Events}
+To handle events that have to wait for a condition in ordered to be enable we need to divide events in two types:
+
+\begin{itemize}
+    \item \textbf{Primary events:} events whose occurrence in scheduled at a certain time.
+    \item \textbf{Conditional events:} events that are triggered by a certain condition becoming true. \textbf{Conditional events are untimed}. For this reason we can store Conditional events at the beginning of the FEL or in an apposite data structure.
+\end{itemize}
+
+\subsection{Revised Simulation Algorithm}
+We rewrite the simulation algorithm taking into account the two types of events possible:
+\begin{itemize}
+    \item Initialize variables, FEL and T
+    \item Iterate:
+        \begin{itemize}
+            \item If there is a conditional event enabled, remove and process it (To does not change), otherwise remove and process the first primary event. Finally update T
+        \end{itemize}
+    \item Continue until the global clock reaches the time stop $T = T_{stop}$ or the Future Event List is empty 
+\end{itemize}
+
