@@ -1,0 +1,76 @@
+\chapter{Model Checking}
+Model Checkers are tools specialized in answering question in regard to system we want to analyze. \par
+
+\section{Non-deterministic setting}
+\textbf{Assume we are in a non deterministic setting}: the system is described by using a transition system and question we want answered are modeled using temporal logic specification (a set of logic formulas). Given this parameters the model checker visit the transition system according to the logic formulas and verify if the question is true or false. If the question is false it returns a \textbf{counter-example}.
+
+\section{Deterministic setting}
+If I have a probability distribution associated to the transition system, then I can extend the approach by instead of checking the satisfiability of a boolean formula, I compute the probability that a formula is satisfied.
+
+\section{Problems with this approach}
+The larger the transition system, the more and more become complex; the larger the boolean formulas the more complex the analysis to check its satisfiability. In the end all of our study will amout in checking reachability probability properties.
+
+\section{Logic in Non-deterministic system}
+
+\section{Computation Tree Logic}
+Computation Tree Logic (CTL) is one of the main logic for expressing requirements on behaviours. In CTL we can write formulas that can be true or false. 
+
+\subsection{Syntax}
+Formulas can be declare for states or paths:
+\begin{itemize}
+    \item \textbf{State formulae:}
+        \begin{itemize}
+            \item $\phi ::= true | a | \phi \land \phi | \lnot \phi | A \psi | E \psi$
+            \item $a$ is an atomic proposition.
+            \item $\psi$ is a path formula.
+        \end{itemize}
+
+    \item \textbf{Path formulae:}
+        \begin{itemize}
+            \item $\psi ::= X \phi | F \phi | G\phi | \phi U \phi$
+            \item \textbf{F:} for "future" states will satisfy the condition
+            \item \textbf{G:} for "global" states (all the ones considered) will satisfy the condition.
+            \item \textbf{U:} for "until" a condition, another condition must be satisfied.
+        \end{itemize}
+\end{itemize}
+
+\subsection{Semantics}
+
+\begin{itemize}
+    \item \textbf{Quantifiers:}
+        \begin{itemize}
+            \item \textbf{A:} universal quantifier (any).
+            \item \textbf{E:} existential quantifier (exists).
+        \end{itemize}
+    \item \textbf{Temporal operators:}
+        \begin{itemize}
+            \item \textbf{F:} the future states
+            \item \textbf{G:} the global states.
+            \item \textbf{U:} until, it asks if a certain property is true UNTIL another property kicks in.
+        \end{itemize}
+\end{itemize}
+
+%Immagine pag 7 slile 04-prob logics.ppt%
+
+\section{Probabilistic Computation Tree Logic}
+Is an extension of CTL that takes intro account probability distribution.
+
+\subsection{Syntax}
+The main difference is that in state formulas we change the quantifiers with \textbf{probabilistic quantifiers}. Instead of asking if a formula is true for all states or for some, we ask if the probability that a certain condition is true is $\geq$ than a given probability.
+\begin{itemize}
+    \item \textbf{State formulae:}
+        \begin{itemize}
+            \item $\phi ::= true | a | \phi \land \phi | \lnot \phi | P_{~p} [\psi]$
+            \item $a$ is an atomic proposition
+            \item $p \in [0,1]$ is a probability bound
+            \item $~ \in \{<, >, \leq, \geq \}$
+        \end{itemize}
+    \item \textbf{Path formulae}
+        \begin{itemize}
+            \item $\psi ::= X \phi | \phi U^{\leq k} \phi | \phi U \phi$
+            \item \textbf{X:} stands for "next"
+            \item $U^{\leq k}$: stands for "bounded until"
+            \item \textbf{U:} stands for "until"
+            \item $k \in \mathbb{N}$
+        \end{itemize}
+\end{itemize}

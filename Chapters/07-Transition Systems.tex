@@ -13,14 +13,16 @@ A Transition System is a pair $(S, \rightarrow)$ where:
     \item S is a \textbf{set of states}.
     \item $\rightarrow \subseteq S \times S$ is the \textbf{transition relation}.
 \end{itemize}
-Given two states $s, s^{'} \in S, (s, s^') \in \rightarrow$, then we can write $s \rightarrow s^'$.\par 
-If instead we have $s \nrightarrow$ it denotes that there exists no $s^' \in S$ s.t. $s \rightarrow s^'$.\par
+
+Given two states $s, s^{'} \in S$ , $(s, s^{'}) \in \rightarrow$, 
+then we can write $s \rightarrow s^{'}$. \par
+If instead we have $s \rightarrow$ it denotes that there exists no $s^{'} \in S$ s.t. $s \rightarrow s^{'}$. \par
 Note that:
 
 \begin{itemize}
     \item The set of states can be infinity (typically is assumed to be recursively enumerable).
     \item Transitions describe system state changes.
-    \item A state may have more than one outgoing transitions ( $s \rightarrow s^'$ and $s \rightarrow s^{''}$ capturing \textbf{non-deterministic behaviors}. The fact that $s_1$ may evolve in either $s_2$ or $s_3$ does not necessary mean that there is a random choice between the two possibilities. The state choosen could depend froma timer, a scheduler, a probabilistic choice and so on. In general, non-determinis is an \textbf{abstraction} of choice criterion that we simply do not want to model.
+    \item A state may have more than one outgoing transitions ( $s \rightarrow s^{'}$ and $s \rightarrow s^{''}$ capturing \textbf{non-deterministic behaviors}. The fact that $s_{1}$ may evolve in either $s_{2}$ or $s_{3}$ does not necessary mean that there is a random choice between the two possibilities. The state chosen could depend from a timer, a scheduler, a probabilistic choice and so on. In general, non-determinism is an \textbf{abstraction} of choice criterion that we simply do not want to model.
 \end{itemize}
 
 \section{Trace}
