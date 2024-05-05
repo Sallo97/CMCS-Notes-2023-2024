@@ -12,21 +12,29 @@ Discrete Event Simulation (DES) does not rely on the memory-less property of Sto
     \item \textbf{Future Event List:} is a list of event notices ordered by time.
 \end{itemize}
 
-%immagine lezione #14 in pag 10/19%
+The system will be consisting in a number of activities that runs concurrently. Each of these activities that are running and that can schedule events in the future. Each activity can have variables describing the state of it and all the variables of all activities describe the state of the simulation.\par
+An activity can be started at the beginning of the simulation or can start after a delay. Each activity as a duration (which is a different concept that delay) which is the time in between the start event and end event. Obviously the start event describe the beginning of the execution of that activity, while the end event describe the termination. An activity can have other events.\par
+The behavior of the activity can be specified by some code which describe the computation done by the activity and schedule some events of the activity
 
 \section{Future Event List}
-the Future Event List (FEL) is the queue we have to schedule the future events. It contains notices of all future events that are scheduled and is ordered by increasing time of event notice.\par
+the Future Event List (FEL) is the queue we have keep track of the future events scheduled. Each element of the list is a pair $(t_{i}, Event_{i})$ where:
+\begin{itemize}
+    \item $t_{i}$ is a time stamp.
+    \item $Event_{i}$ is a description of the event.
+\end{itemize}
+
+It is ordered by increasing time of the time stamps.\par
 
 %immagine lezione #14 in pag 11/19%
 
 \subsubsection{Generalization of the simulation algorithm using the FEL}
 \begin{itemize}
-    \item initialize state variables, the FEL and a \textbf{global clock variable} $T = 0$
+    \item initialize state variables, the FEL and a \textbf{global clock variable} $T = 0$. At the beginning the FEL contains only the starting events of each activities in our system.
     \item at each step:
         \begin{itemize}
             \item remove the first event notice $(t, Event)$.
             \item handle Event. This could cause the update of state variables, adding one or more event notices to the FEL and removing one or more scheduled events from the FEL.
-            \item update the global cloc $T = t$
+            \item update the global clock $T = t$
         \end{itemize}
 
     \item we stop when the clock reach a stop time $T_{stop}$ s.t. $T = T_{stop}$ or the FEL is empty. 

@@ -7,10 +7,56 @@ Agent-Based Simulation is a form of Discrete Event Simulation that consists in "
 Agents can move in a 2D or 3D environment. Agent position and spatial charateristics of the environment will influence the system dynamics (e.g. agents can only interaction with neighbours; there could be obstacles; resources are distributed across the environment; areas could have different charateristics).
 
 \section{Cellular Automata}
-Cellular Automata (CA) allow to describe environments in 1D, 2D or 3D. The environment is described as a matrix of cells. Each cell is defined by its own state that can change by means of rules. Cellular Automata can be used to model Complex Systems with spacial structure.\par
+Cellular Automata (CA) allow to describe environments in 1D, 2D or 3D. The environment is described as a grid, where each cell of the grid as its own state and behavior described by something similar to an automaton. It's called Cellular Automata because in our case the automaton in our grid are in cells.\par
+Each cell is defined by its own state that can change by means of rules. Cellular Automata can be used to model Complex Systems with spacial structure.
 
-\subsubsection{Multicellularity}
-Cellular Automata uses as reference multicellularity ad a way to build complex living systems.\par
-Multicellular systems are composed by many copies of cell, our unique fundamental unit. Cells will interact with the ones in his proximity, influencing the fate and behavior of each cell. The result is an heterogeneous system composed by differentiated cells that act as specialized units, even if they all contain the same genetic material and have essentially the same structure.
+\subsection{Case of application}
+As we have stated, in Cellular Automata we are describing an environment as a composition of cells, each with its own behavior. What we want to study is the emergent behavior obtained by the interaction of all this components. So Cellular Automata con model complex systems.
 
-\section{Modelling cellular systems}
+\subsection{Modeling cellular systems}
+We want to define the simplest nontrivial model of a cellular system. We base our model on the following concepts:
+\begin{itemize}
+    \item Cell and cellular space. We need to define a topology (more that just grids).
+    \item Neighborhood, in the sense that any cell can interact with the cells near it.
+    \item Cell state which describes the cell at that moment.
+    \item Transition rules which define how a cell can change its own state.
+\end{itemize}
+
+\subsubsection{Cellular Space}
+Typically we have 1D, 2D or 3D environments s.t.:
+\begin{itemize}
+    \item 1D: describe the environment as a vector of cells.
+    \item 2D: describe the environment as a grid.
+    \item 3D: describe the environment as cubes
+\end{itemize}
+
+\subsubsection{Neighborhood}
+There are two aspect to consider for defining a neighborhood:
+\begin{itemize}
+    \item the radius of the neighborhood
+    \items the corners of each cell describing the adjacent cells (so the nearest ones).
+\end{itemize}
+
+\subsubsection{State Set and Transition Rule}
+The state of a cells depends on the application we are studying. We declare a set of possible state $S=\{s_{0}, ...,s_{k-1}\} $ that each cell can have.\par
+Transition rule describe how the state of a cell change from one state to another on the basis on the current state and the state of the cells in the neighborhood.\par
+Rules are applied in parallel to all the cells in the environment.\par
+We need to have a complete specification regarding all possible configurations of cells and neighborhood. This is source of exponential explosion of the model, so often you do not need to define each possible rule, but instead define a global property for the neighborhood.\par
+For this reason we define a class of special cases called \textbf{totalistic rules}, in which of instead of defining the next state of a cell depending on the precise configuration of the neighborhood, you define the function in base of the sum of the state of the neighborhood. Assume that the state of the neighborhood is represent by a number, then you can simply check its value and determine from it the next state of the cell. This reduce the complexity considering only all the possible aggregations.\par
+
+A rule is \textbb{outer totalistic:} if it is based on the sum of the labels plus the current state of the set.
+
+
+\subsubsection{Boundary Condition}
+This aspect vary from model to model. The environment is typically finite, so we have to consider how to apply transition rules to cells that are in the boundary of the environment. So we have to define assumption to how to update the state for these cells.
+
+\section{Writing a Cellular Automata model}
+To implement and run a CA experiment you have to:
+\begin{itemize}
+    \item  Assign the geometry of the CA space
+    \item Assign the geometry of the neighborhood
+    \item Define the set of states of the cells
+    \item Assign the transition rule
+    \item Assign the initial conditions of the CA
+    \item Repeatedly update all the cells of the CA, until some stopping condition is met.
+\end{itemize}
