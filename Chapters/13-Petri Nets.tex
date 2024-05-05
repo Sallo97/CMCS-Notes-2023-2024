@@ -171,3 +171,140 @@ Now considering the incidence matrix $W$ we have defined previously, any solutio
 \begin{equation*}
     i \times W = 0
 \end{equation*}
+
+\section{Reachability Tree Revised}
+Another approach to overapproximation is based upon the Karp and Miller Tree. In general the reachability tree that describe the system behavior can be infinite. The approach here is to construct a "smarter" reachability tree that approximate the real reachability tree in a finite way. The approximation consist in replacing infinite paths with a special node.
+
+\subsection{Monotonicity}
+The construction of our overapproximated tree is based on a property of monotonicity present in the markings of Petri Nets. Petri Nets induce strongly monotonic transition systems. So what I do is condense markings in which the tokens remains the same.
+
+\subsubsection{Example}
+Given the following path of our tree where each elements reprents a marking and each row a transition:
+\begin{equation*}
+    <1, 0, 0, 0> \rightarrow <0, 0, 1, 0> \rightarrow <0, 0, 0, 1> \rightarrow <1, 0, 1, 1>
+\end{equation*}
+
+From the first three marking we can deduce that $p_{1}, p_{3}$ and $p_{4}$ are unbounded. Thus we can rewrite the last marking as:
+
+\begin{equation*}
+    <\omega, 0, \omega, \omega>
+\end{equation*}
+
+\textbf{Note:} $\omega$ must be regarded as: "any numer of tokens".
+
+\subsubsection{Algorithm}
+This is how we compute the successors of node n:
+
+%insert image form slide 14 pag 109/147
+
+\subsection{Stopping a branch}
+Another small aspect to consider during the construction of the revised tree. On the current marking if I have to generate all the possible next markings considering all the possible transition that can be fired, if by firing a transition I generate a marking which is $\leq$ than a previous marking then I can cancel it, avoiding to continuing generating the marking there.
+
+%insert image from lesson 14 pag 110/147i
+
+\section{Properties of Karp and Miller Tree}
+
+\subsection{Theorem 1}
+A Karp and Miller tree is always finite
+\subsubsection{Idea of the proof}
+If the net is not bounded, int is because of some infinite increasing sequence of marking. Such sequences are detected in a finite amount of time by adding $\omega$ in the unbounded places.
+
+\subsection{Theorem 2}
+A net is bounded iff there is no node containing an $\omega$ in its Karp and Miller tree.
+
+\subsection{Theorem 3}
+A place $p$ is unbounded iff there exists a node labeled by $m$ in the Karp and Miller tree s.t. $m(p) = \omega$
+
+\subsection{Theorem 4}
+Transition $t$ is semi-live iff there exists a node labeled by $m$ in the Karp and Miller tree s.t. $t$ can fire in m.
+
+\section{Coverability set}
+First of all let's state the following properties:
+\begin{itemize}
+    \item The set of reachable markings \textbf{might be infinite}.
+    \item The set of labels of the nodes of the Karp and Miller tree \textbf{are always finite}
+\end{itemize}
+
+We define the Coverability set as a set of markings related to the Karp and Miller tree that will be an overapproximation on the set of reachable markings.
+
+\subsection{Downward-closure}
+Let us assume that $\forall i \in \mathbb{N} : i < \omega$.
+Let $m$ be a marking (possibly containing $\omega$), then its downward-closure is the set:
+\begin{equation*}
+    \downarrow m = \{m^{'} | m^{'} \preceq m\}
+\end{equation*}
+
+Given the set of markings $S = \{m_{1}, m_{2}, ..., m_{k}\}$ then:
+\begin{equation*}
+    \downarrow S = \downarrow m_{1} \cup \downarrow m_{2} \cup ... \cup \downarrow m_{k}
+\end{equation*}
+
+So the downward-closure operation can be used to construct a set of markings define as all the ones that are smaller than a given one.
+
+\subsection{Theorems}
+Let us state the following theorems:
+\begin{itemize}
+    \item $\downarrow Cover(N) = \downarrow Reach(N)$
+    \item $Reach(N) \subseteq \downarrow Cover(N)$
+\end{itemize}
+hence $\downarrow Cover(N)$ is a finite over-approximation of $Reach(N)$.\par
+This means that $Cover(N)$ is another overapproximation of the set of reachable markings. If a marking is not in $\downarrow Cover(N)$, \textbf{then it is not reachable} (sufficient condition).
+
+\section{Another approach to reachability}
+In Petri Nets reachability could be achieved not requiring a \textbf{exactly that amount} of tokens to reach the marking, we can reach a marking by having \textbf{at least} that number of tokens. \par
+The problem thus becomes the coverability problem:
+\begin{center}
+    Does there exist a reachable marking which is larger than some marking b?
+\end{center}
+
+So given a marking $b$, to prove that it is reachable I start from the initial marking $m_{0}$ and apply the reachability graph and as it grows I check if it includes some marking $m^{'}$ which is greater or equal that $b$, in which case I can say that I can cover $b$.
+
+\subsection{Formal definition}
+There are two alternative definitions:
+\begin{itemize}
+    \item Is there a reachable marking $m$ s.t. $m \succeq b$?
+    \item Does $Reach(N) \cap \{m | m \succeq b\} \neq \phi$ 
+\end{itemize}
+
+\subsection{First solution of the problem}
+We use the coverability set since it is an over-approximation of the reachable states. The coverability set can be easily computed by using the Karp and Miller algorithm.\par
+\subsubsection{Case where the marking is not reachable}
+Consider:
+\begin{equation*}
+    \downarrow Cover(n) \cap U = \emptyset
+\end{equation*}
+
+implies
+
+\begin{equation*}
+    Reach(N) \cap U = \emptyset
+\end{equation*}
+
+\subsubsection{Case where the marking is reachable}
+There is $m \in \downarrow Cover(N) \cup U$, hence there is $m^{'} \succeq m$ which is in $Reach(N)$. However, any $m^{'} \succeq m$ is also in U. Thus there is a $m^{'}$ both in $Reach(N)$ and $U$.
+
+Note: $m^{'} > m$ since $\downarrow Cover = \downarrow Reach$.\par
+
+So now we have the following implication:
+
+\begin{equation*}
+    Reach(N) \cap U = \emptyset
+\end{equation*}
+
+implies
+
+\begin{equation*}
+    \downarrow Cover(N) \cap U = \emptyset
+\end{equation*}
+
+Thus we can say:
+\subsubsection{Theorem}
+
+\begin{equation*}
+    Reach(N) \cap U = \emptyset \iff \downarrow Cover(N) \cap U = \emptyset
+\end{equation*}
+
+Which means that in order to check whether a marking in U is reachable, we can use the Karp and Miller approach to compute the $\downarrow Cover(N)$ set and check whether it has a non-empty intersection with U.
+
+\section{Remark regard our overapproximation methods}
+Note how all of the method we listed does not limit the state space, like putting an artificial bounds to the number of tokens that can be present. In Prims we require limitation on the state space because the language it uses is more richer than the one from Petri Nets.
