@@ -1,0 +1,63 @@
+\chapter{Applications of Petri Nets in Manufacturing}
+
+Petri Nets have a wide range of application domains like Performance evaluation, Business process, and Biology. Among them the most common application is in the context of manufacturing. 
+
+\section{Flexible Manufacturing Systems}
+A Flexible Manufacturing System (FMS) is an application of Petri Nets in the field of manufacturing. FMS are composed by:
+
+\begin{itemize}
+    \item A set of workstations (or machines) where products must be processed.
+    \item A flexible transport system (e.g. rob arms) which load and unload the workstations.
+\end{itemize}
+
+The sequence of operations performed to manufacture a product is called working process (WP). A system resource is an element of the FMS that is able to hold a product (for storage, operation, transport). A FMS can execute more than one WP at the same time:
+\begin{itemize}
+    \item It can execute WPs concurrently generating several instances of the same WP utilizing multiple tokens.
+    \item Different WPs shares the same resources by being in a composed net.
+\end{itemize}
+
+\section{Formalization of WPs}
+\begin{itemize}
+    \item A Working Process has an initial and final state. Initial and final state cannot use rources
+    \item Choices are allowed in a Working Process, but iterations are not.
+    \item Only one shared resource is allows to be used at each state of the WP, meaning a product can be held by only one resource at a time.
+\end{itemize}
+
+
+\section{Deadlocks}
+Competition among WP for resources can lead to deadlocks. Generally deadlocks are caused by wrong resource allocation policies, causing circular wait situations for a set of resources. \par
+There are three possible approaches to solving the problem of deadlocks:
+\begin{itemize}
+    \item \textbf{Deadlock prevention:} a control policy is established in a static way in order to guarantee that deadlocks cannot be reached.
+    \item \textbf{Deadlock avoidance:} system execution is monitored and at every time the control policy determines how to proceed in order to avoid a deadlock state.
+    \item \textbf{Deadlock recovery:} A control policy exists which can recognize if there is a deadlock, in which case it restore the system in a non-deadlock state.
+\end{itemize}
+
+\section{Deadlock prevention using Siphons}
+A method to prevent deadlocks is based on identifying siphons.
+
+\subsection{Siphon}
+A Siphon is a constraint about places. Given a place $p$ we define the function $Pre$ and $Post$ s.t.:
+\begin{itemize}
+    \item $Pre(p)$ returns the transitions having $p$ as an output place.
+    \item $Post(p)$ returns the transitions having p as an input place
+\end{itemize}
+
+intuitively if we have a set of places $S = \{p_{1}, p_{2}, ...\}$:
+\begin{itemize}
+    \item $Pre(p_{1}) \cup Pre(p_{2}) \cup Pre(p_{2}) \cup ...$ 
+    \item $Post(p_{1}) \cup Post(p_{2}) \cup ...$ 
+\end{itemize}
+
+We define a siphon as a set of places S s.t. $Pre(S) \subseteq Post(S)$
+
+\subsubsection{Theorem for Siphons in FMS}
+Given a Petri Net modeling a FMS is deadlock free iff $\forall$ reachable marking $m$ and every (minimal) siphon S it holds that $m(S) \neq 0$. Recall that $m(S)$ denotes the overall number of tokens in the set of places S.\par
+\textbf{Note: this theorems is valid only for Petri Net modeling a FMS}.
+
+\subsection{Description of the method}
+We have to take into account all possible siphons. We create a place for each siphon in the net with a small enough number of tokens. Every time the production of a new product starts, one token is removed from each of such places (from the very beginning product reserves its right to acquire the resources involved in siphons). As soon as the product reaches a place from where one of the siphones cannot be reached, it releases the corresponding token.
+
+\subsection{Identifying siphons}
+In order to make the method usable I need a way to find syphons in my Petri Net which model a FMS. Fortunately siphons can be automatically computed by checking for each subset of places $S$ if the condition $Pre(S) \subseteq Post(S)$ is satisfied.\par
+We can also automatically identify siphons that can become empty by checking for each siphone $S^{'}$ if they do not support a place invariant.
