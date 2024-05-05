@@ -1,0 +1,173 @@
+\chapter{Petri Nets}
+Petri Nets is a modeling languages notation that allow us to apply different analysis approaches. Petri nets have been proposed to model concurrent systems. 
+
+\section{Concurrent Systems}
+A concurrent system is a system (not strictly from computer science) where there are processes of any type executed at any time. In this system you have a workflow where some processes works in parallel (independent from each other) and others work sequentially (they must wait for the previous machines to finish).\par
+
+Petri Nets are a graphical model notation for concurrent systems in which you construct a graph that describe resources and events involving those resources. There are two types of nodes:
+
+\begin{itemize}
+    \item \textbf{Places:} represent type of resources. 
+        \begin{itemize}
+            \item \textbf{Tokens:} represent instances of a resource of some specific type. Tokes stay inside places. The place where they are describe their type
+        \end{itemize}
+    \item \textbf{Transition:} represent events that change the state of one or more resources. They connect places to places (like a Multiset Rewriting rule or a chemical reaction). Incoming edges are connected to places that provide resources (tokens) that are consumed by the transition, while output edges represent places for which resources have been produced.
+\end{itemize}
+
+\section{Firing a transition}
+Firing a transition means \textbf{executing it}. In order to fire a transition you must have enough resources in input, then it will produce the necessary resources for the output places.
+
+\section{Formal definition of Petri Nets}
+A Petri Net is a tuple $<P, T>$ where:
+\begin{itemize}
+    \item $P$ is the (finite) set of \textbf{places}.
+    \item $T$ is the (finite) set of \textbf{transitions} s.t. each transition $t$ is a tuple $<I, O>$ where:
+        \begin{itemize}
+            \item $I$ is a function s.t. $t$ consumes $I(p)$ tokens in each place $p$.
+            \item $O$ is a function s.t. $t$ produces $O(p)$ tokens in each place $p$.
+        \end{itemize}
+\end{itemize}
+
+\subsection{Markings}
+Tokens that are placed in the network represent\textbf{ the state of the network}. The state of the Petri Net is also called the \textbf{marking of the Petri Net}. A marking con be seen in two different ways:
+
+\begin{itemize}
+    \item a function $m$ s.t. $m(p)$ is the number of tokens in place $p$.
+    \item a vector $m = <m_{1}, m_{2}, ..., m_{n}$ where $m_{i}$ is the number of tokens in place $p_{i}$. 
+    \item a vector $m = <d_{1}p_{1}, ..., d_{n}p_{n}$ where $d_{i}$ represents the number of tokens in $p_{i}$.
+\end{itemize}
+
+\subsection{Firing a transition}
+Given a transition $t = <I, O>$, it can be fired from $m$ $iff$ for any place p:
+
+\begin{equation*}
+    m(p) \geq l(p)
+\end{equation*}
+
+If the condition is satisfied then the firing transforms the marking $m$ into a marking $m^{'}$ s.t. for any place p:
+\begin{equation*}
+    m^{'}(p) = m(p) - I(p) + O(p)
+\end{equation*}
+
+This transformation can be described by the following notations:
+\begin{itemize}
+    \item $m \rightarrow m^{'}$
+    \item $Post(m) = \{m^{'} | m \rightarrow m^{'}\}$. $Post(m)$ is the set of markings that can be obtained by firing transitions from $m$ ($Post$ correspond to the transition relation in the Transition Systems)
+\end{itemize}
+
+\subsubsection{Initial marking}
+The marking that we consider to be the first one is colled the \textbf{initial marking} $m_{0}$.
+
+\subsubsection{Reachable markings}
+Given two markings $m$ and $m{'}$ s.t.:
+\begin{equation*}
+    m \rightarrow m_{1} \rightarrow m_{2} \rightarrow ... \rightarrow m^{'}
+\end{equation*}
+Then we can say that $m^{'}$ is reachable from $m$.\par
+Given the Petri Net $N$ with initial marking $m_{0}$, then the function $Reach(N)$ is the set of reachable markings of N s.t.:
+\begin{center}
+    Reach(N) = \{$m$ reachable from $m_{0}$\}
+\end{center}
+
+\subsection{Ordering on markings}
+Markings can be compared using the precedence relation $\preceq$:
+\begin{itemize}
+    \item $m \preceq m^{'} \iff \forall p. m(p) \leq m^{'}(p)$.
+    \item $m \prec m^{'} \iff m \preceq m^{'} \land m \neq m^{'}$
+\end{itemize}
+
+\section{What can we use Petri Nets for}
+The question we can investigate on Petri Nets are these:
+\begin{itemize}
+    \item \textbf{Boundedness:} is the number of reachable markings bounded?
+    \item \textbf{Place boundedness:} in each place the number of tokens I can obtain is bounded or can it grows in an unbounded way?
+    \item \textbf{Semi-liveness:} the transition that are present in a Petri Net will they all be fired? There are some transition that can never be fired?
+    \item \textbf{Coverability}
+\end{itemize}
+
+\section{Decidability of a marking}
+The reachability graph of a Petri Net (aka the Transition System of a MultiSet Rewriting system) can be infinite, \textbf{but the reachability property is decidable}. The computation of decidability has been proven to require \textbf{exponential time}. This means that Petri Net are not Turing equivalent.\par
+In order to compute reachability in an efficient way, several alternatived have been proposed:
+
+\subsubsection{Solution 1}
+We consider overapproximations of the set of reachable states (based on Place Invariants or on Karp and Miller tree). We compute in polynomial time a set which is an overapproximation of the set of reachable marking. So our solution will include surely ALL the reachable marking, but also it can contain some unreachable ones. So we are only sure that if a marking is not in the overapproximation, then it is not reachable.
+
+\subsubsection{Solution 2}
+Instead of consider reachability, we will answer coverability: "is a marking greater or equal than is reachable?" The problem of coverability is weaker than reachability, but easy to compute and meaningful in the context of Petri Nets.
+
+\section{Place Invariants}
+Place Invariants are a way to reason about marking which has some analogy which the mass conservation invariant (matter can never be created or destroyed). This can be used to put constraint on a set of reachable markings.\par
+Formally a Place invariant (or p-semiflow) is a vector $i$ of natural numbers s.t. for any reachable marking m:
+\begin{equation*}
+    \sum_{p \in P} i(p) \times m(p) = \sum_{p \in P} i(p) \times m_{0}(p)
+\end{equation*}
+
+\subsection{Invariants as overapproximations}
+Given a marking $m$ and an invariant $i$, we can say that if $m$ is reachable and $i$ is an invariant, then:
+\begin{equation*}
+    \sum_{p \in P} i(p) \times m(p) = \sum_{p \in P} i(p) \times m_{0}(p)
+\end{equation*}
+The reverse is not true.
+
+\subsubsection{Theorem}
+$\forall$ Petri Net N:
+\begin{center}
+    $Reach (N) \subseteq \{ m | m $ respects some invariant of $N\}$
+\end{center}
+
+So if a marking does not respect the invariant, \textbf{then we surely know that is not reachable}.
+
+\subsubsection{Theorem: place invariant and boundedness}
+If there exists a place invariant $i$ and a place $p$ s.t. $i(p) > 0$, then $p$ is bounded. \textbf{The reverse is not true.}
+
+\section{How to compute Place invariants}
+\subsection{Matrix chatacterisation}
+Let us represent the Petri Net as a matrix where we but places on the rows and transitions on the cons. We construct a matrix that describes the input tokens that are consumed for a given transition and a matrix for those that have been produced:
+
+\subsubsection{Consumption Matrix}
+\[
+W^{-} =
+\begin{bmatrix}
+    I_{1}(p_{1}) & I_{2}(p_{1}) & ... & I_{k}(p_{1}) \\
+    I_{1}(p_{2}) & I_{2}(p_{2}) & ... & I_{k}(p_{2}) \\
+    \vdots & \vdots & ... & \vdots \\
+    I_{1}(p_{n}) & I_{2}(p_{n}) & ... & I_{k}(p_{n})
+\end{bmatrix}
+\]
+
+\subsubsection{Production Matrix}
+\[
+W^{+} =
+\begin{bmatrix}
+    O_{1}(p_{1}) & O_{2}(p_{1}) & ... & O_{k}(p_{1}) \\
+    O_{1}(p_{2}) & O_{2}(p_{2}) & ... & O_{k}(p_{2}) \\
+    \vdots & \vdots & ... & \vdots \\
+    O_{1}(p_{n}) & O_{2}(p_{n}) & ... & O_{k}(p_{n})
+\end{bmatrix}
+\]
+
+\subsubsection{Incidence Matrix}
+We then define the \textbf{incidence matrix} W that represent the global effect of every transition:
+
+\begin{equation*}
+    W = W^{+} - W^{-}
+\end{equation*}
+
+\section{Computing place invariants}
+We have said that place invariants represent mass conservation, so all the reachable markings will preserve that constraint. Reachable markings are obtained by firing transition. Then every transition that fires has to preserve the overall weight of the matrix.\par
+Then the weight of the tokens that are produced has to be the same as the weight of the tokens that are consumed in order to preserve the overall weight.\par
+So I express invariant by focusing on individual transitions:\par
+$\forall$ transition $t = <I, O>$ we should have:
+\begin{equation*}
+    \sum_{p \in P} I(p) \times i(p) = \sum_{p \in P}O(p) \times i(p)
+\end{equation*}
+
+which is the same as putting:
+\begin{equation*}
+    \sum_{p \in P} (O(p) - I(p)) \times i(p) = 0
+\end{equation*}
+
+Now considering the incidence matrix $W$ we have defined previously, any solution $i$ is a place invariant if satisfy the following scalar product:
+\begin{equation*}
+    i \times W = 0
+\end{equation*}
